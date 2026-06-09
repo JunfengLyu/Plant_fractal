@@ -1,8 +1,10 @@
 # Plant Fractal
 
-This repository provides a demo pipeline for quantifying fractal-like and network-like structures in plant venation images.
+This repository provides demo pipelines for analyzing and modeling fractal-like structures in plants.
 
 The example script `vein_demo.py` processes a leaf venation image, extracts the binary vein mask and skeleton, estimates fractal and lacunarity metrics, reconstructs the skeleton network, and visualizes graph-theoretic properties such as degree distribution and hierarchy depth.
+
+The script `L-system.py` demonstrates how a deterministic Lindenmayer system (L-system) can generate plant-like branching patterns through iterative string rewriting and turtle-graphics interpretation. It also illustrates how iteration depth and turning angle affect the resulting morphology.
 
 ---
 
@@ -29,15 +31,20 @@ Plant_fractal/
 │   ├── box_counting_data.csv
 │   ├── lacunarity_data.csv
 │   └── degree_distribution.csv
+├── L-system.py
+├── L-system_images/
+│   ├── 图_L-system转角参数比较.png
+│   └── 图_L-system迭代过程.png
 └── README.md
 ```
 
 ---
 
-
 ## Usage
 
-Run the demo script from the project root:
+### Leaf venation analysis
+
+Run the venation demo script from the project root:
 
 ```bash
 python vein_demo.py
@@ -54,6 +61,24 @@ and saves all output figures and tables into:
 ```text
 vein_demo/
 ```
+
+### L-system plant generation
+
+Run the L-system script from the project root:
+
+```bash
+python L-system.py
+```
+
+By default, the script uses the `classic` preset and saves the generated plant as `l_system_plant.svg`. It uses only the Python standard library. Presets, iteration depth, turning angle, and output path can be customized from the command line:
+
+```bash
+python L-system.py --preset bushy --iterations 5 --angle 30 --output bushy.svg
+```
+
+Available presets are `classic`, `bushy`, and `binary`. The iteration number must be between 1 and 9.
+
+The L-system model begins with an axiom and repeatedly applies production rules in parallel. The resulting command string is interpreted using turtle graphics: `F` draws a branch segment, `+` and `-` change the heading, and `[` and `]` save and restore branching states.
 
 ---
 
@@ -100,12 +125,27 @@ The hierarchy depth is estimated by breadth-first search from an approximate bas
   <img src="vein_demo/09_hierarchy_depth_distribution.png" width="45%">
 </p>
 
+---
+
+## L-system plant morphology
+
+L-systems provide a concise, rule-based description of plant development. Starting from a simple initial string, repeated rewriting produces increasingly complex branching structures. The iteration number controls the developmental depth and structural complexity of the generated plant.
+
+<p align="center">
+  <img src="L-system_images/图_L-system迭代过程.png" width="75%">
+</p>
+
+The turning angle is a key morphological parameter in turtle-graphics interpretation. Changing this angle while keeping the production rules fixed alters branch orientation, crown width, compactness, and the overall appearance of the simulated plant.
+
+<p align="center">
+  <img src="L-system_images/图_L-system转角参数比较.png" width="75%">
+</p>
 
 ---
 
 ## Main methods
 
-The current demo includes:
+The current demos include:
 
 - CLAHE contrast enhancement
 - Otsu thresholding
@@ -117,15 +157,18 @@ The current demo includes:
 - Connected component analysis
 - Cycle rank / loop number
 - BFS-based hierarchy depth
+- Deterministic L-system string rewriting
+- Stack-based turtle-graphics interpretation
+- Iteration-depth and turning-angle comparison
 
 ---
 
-
 ## Citation notes
-
 
 - Otsu, N. (1979). A threshold selection method from gray-level histograms.
 - Zhang, T. Y., & Suen, C. Y. (1984). A fast parallel algorithm for thinning digital patterns.
 - Falconer, K. J. (2003). *Fractal geometry: Mathematical foundations and applications*.
 - Plotnick, R. E., Gardner, R. H., Hargrove, W. W., Prestegaard, K., & Perlmutter, M. (1996). Lacunarity analysis.
 - Hagberg, A. A., Schult, D. A., & Swart, P. J. (2008). Exploring network structure, dynamics, and function using NetworkX.
+- Lindenmayer, A. (1968). Mathematical models for cellular interactions in development.
+- Prusinkiewicz, P., & Lindenmayer, A. (1990). *The algorithmic beauty of plants*.
